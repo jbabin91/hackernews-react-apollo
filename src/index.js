@@ -39,10 +39,17 @@ const wsLink = new WebSocketLink({
   },
 });
 
-const link = split(({query}) => )
+const link = split(
+  ({ query }) => {
+    const { kind, operation } = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLinkWithAuthToken,
+);
 
 const client = new ApolloClient({
-  link: httpLinkWithAuthToken,
+  link,
   cache: new InMemoryCache(),
 });
 
